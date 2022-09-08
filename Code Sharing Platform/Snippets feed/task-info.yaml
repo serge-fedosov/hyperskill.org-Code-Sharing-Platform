@@ -420,6 +420,186 @@ files:
         }
     }
   learner_created: false
+- name: src/platform/config/ThymeleafConfig.java
+  visible: true
+  text: |
+    package platform.config;
+
+    import org.springframework.context.annotation.Bean;
+    import org.springframework.context.annotation.Configuration;
+    import org.thymeleaf.spring5.SpringTemplateEngine;
+    import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
+    import org.thymeleaf.spring5.view.ThymeleafViewResolver;
+
+    @Configuration
+    public class ThymeleafConfig {
+        @Bean
+        public SpringResourceTemplateResolver templateResolver() {
+            SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
+            templateResolver.setCacheable(false);
+            templateResolver.setPrefix("classpath:/templates/");
+            templateResolver.setSuffix(".html");
+            return templateResolver;
+        }
+
+        @Bean
+        public SpringTemplateEngine templateEngine() {
+            SpringTemplateEngine springTemplateEngine = new SpringTemplateEngine();
+            springTemplateEngine.addTemplateResolver(templateResolver());
+            return springTemplateEngine;
+        }
+
+        @Bean
+        public ThymeleafViewResolver viewResolver() {
+            ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
+            viewResolver.setTemplateEngine(templateEngine());
+            viewResolver.setOrder(1);
+            return viewResolver;
+        }
+    }
+  learner_created: true
+- name: src/platform/models/Code.java
+  visible: true
+  text: |
+    package platform.models;
+
+    import java.time.LocalDateTime;
+    import java.time.format.DateTimeFormatter;
+
+    public class Code {
+
+        private String code;
+        private LocalDateTime date;
+
+        public Code() {
+        }
+
+        public Code(String code, LocalDateTime date) {
+            this.code = code;
+            this.date = date;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+
+        public String getDate() {
+            return date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        }
+
+        public void setDate(LocalDateTime date) {
+            this.date = date;
+        }
+    }
+  learner_created: true
+- name: src/platform/controllers/WebController.java
+  visible: true
+  text: |
+    package platform.controllers;
+
+    import org.springframework.stereotype.Controller;
+    import org.springframework.ui.Model;
+    import org.springframework.web.bind.annotation.GetMapping;
+    import platform.services.CodeService;
+
+    @Controller
+    public class WebController {
+
+        private final CodeService codeService;
+
+        public WebController(CodeService codeService) {
+            this.codeService = codeService;
+        }
+
+        @GetMapping("/code")
+        public String code(Model model) {
+            model.addAttribute("code", codeService.getCode());
+            return "code";
+        }
+
+        @GetMapping("/code/new")
+        public String codeNew() {
+            return "new";
+        }
+    }
+  learner_created: true
+- name: src/platform/services/CodeService.java
+  visible: true
+  text: |
+    package platform.services;
+
+    import org.springframework.stereotype.Service;
+    import platform.models.Code;
+
+    import java.time.LocalDateTime;
+
+    @Service
+    public class CodeService {
+
+        private static Code code = new Code("test", LocalDateTime.now());
+
+        public Code getCode() {
+            return CodeService.code;
+        }
+
+        public void setCode(Code code) {
+            code.setDate(LocalDateTime.now());
+            CodeService.code = code;
+        }
+    }
+  learner_created: true
+- name: src/platform/controllers/ApiController.java
+  visible: true
+  text: |
+    package platform.controllers;
+
+    import org.springframework.beans.factory.annotation.Autowired;
+    import org.springframework.web.bind.annotation.*;
+    import platform.models.Code;
+    import platform.services.CodeService;
+
+    @RestController
+    @RequestMapping("/api")
+    public class ApiController {
+
+        private final CodeService codeService;
+
+        @Autowired
+        public ApiController(CodeService codeService) {
+            this.codeService = codeService;
+        }
+
+        @GetMapping("/code")
+        public Code getCode() {
+            return codeService.getCode();
+        }
+
+        @PostMapping("/code/new")
+        public String postCode(@RequestBody Code code) {
+            codeService.setCode(code);
+            return "{}";
+        }
+    }
+  learner_created: true
+- name: src/resources/templates/code.ftlh
+  visible: true
+  learner_created: true
+- name: src/resources/templates/new.ftlh
+  visible: true
+  learner_created: true
+- name: src/resources/templates/codes.ftlh
+  visible: true
+  learner_created: true
+- name: src/platform/dto/CodeDTO.java
+  visible: true
+  learner_created: true
 feedback_link: https://hyperskill.org/learn/step/11029#comment
-status: Unchecked
+status: Solved
+feedback:
+  message: Congratulations!
+  time: Thu, 08 Sep 2022 18:26:05 UTC
 record: -1
