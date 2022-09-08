@@ -1,12 +1,19 @@
 package platform.models;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
+@Entity
+@Table(name = "code")
 public class Code {
 
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name = "code")
     private String code;
+    @Column(name = "date")
     private LocalDateTime date;
 
     public Code() {
@@ -35,7 +42,6 @@ public class Code {
     }
 
     public LocalDateTime getDate() {
-//        return date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         return date;
     }
 

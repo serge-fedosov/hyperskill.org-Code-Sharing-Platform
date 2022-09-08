@@ -1,45 +1,49 @@
 package platform.services;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import platform.dto.CodeDTO;
 import platform.models.Code;
+import platform.repositories.CodeRepository;
+import platform.util.CodeNotFoundException;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
+@Transactional(readOnly = true)
 public class CodeService {
 
+    private final CodeRepository codeRepository;
     private final ModelMapper modelMapper;
-    private static int count = 0;
-    private final static ArrayList<Code> codes = new ArrayList<>();
 
-    public CodeService(ModelMapper modelMapper) {
+    @Autowired
+    public CodeService(CodeRepository codeRepository, ModelMapper modelMapper) {
+        this.codeRepository = codeRepository;
         this.modelMapper = modelMapper;
     }
 
     public CodeDTO getCode(int id) {
-        return modelMapper.map(codes.get(id - 1), CodeDTO.class);
+        Optional<Code> code = codeRepository.findById(id);
+
+        if (code.isEmpty()) {
+            throw new CodeNotFoundException();
+        }
+
+        return modelMapper.map(code.get(), CodeDTO.class);
     }
 
+    @Transactional
     public void setCode(Code code) {
-        count++;
-
-        code.setId(count);
         code.setDate(LocalDateTime.now());
-        codes.add(code);
+        codeRepository.save(code);
     }
 
     public List<CodeDTO> getLatest() {
-        List<CodeDTO> result = new ArrayList<>();
-
-        int count = 0;
-        for (int i = codes.size(); i > 0 && count < 10; i--, count++) {
-            result.add(modelMapper.map(codes.get(i - 1), CodeDTO.class));
-        }
-
-        return result;
+        return codeRepository.findTop10ByOrderByIdDesc().stream().map(code -> modelMapper.map(code, CodeDTO.class)).collect(Collectors.toList());
     }
 }

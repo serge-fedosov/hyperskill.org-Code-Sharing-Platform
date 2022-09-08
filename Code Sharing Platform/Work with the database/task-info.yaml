@@ -474,6 +474,295 @@ files:
         }
     }
   learner_created: false
+- name: src/platform/models/Code.java
+  visible: true
+  text: |
+    package platform.models;
+
+    import java.time.LocalDateTime;
+    import java.time.format.DateTimeFormatter;
+
+    public class Code {
+
+        private int id;
+        private String code;
+        private LocalDateTime date;
+
+        public Code() {
+        }
+
+        public Code(int id, String code, LocalDateTime date) {
+            this.id = id;
+            this.code = code;
+            this.date = date;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+
+        public LocalDateTime getDate() {
+    //        return date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            return date;
+        }
+
+        public void setDate(LocalDateTime date) {
+            this.date = date;
+        }
+    }
+  learner_created: true
+- name: src/platform/dto/CodeDTO.java
+  visible: true
+  text: |
+    package platform.dto;
+
+    import java.time.LocalDateTime;
+    import java.time.format.DateTimeFormatter;
+
+    public class CodeDTO {
+
+        private String code;
+        private LocalDateTime date;
+
+        public CodeDTO() {
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+
+        public String getDate() {
+            return date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        }
+
+        public void setDate(LocalDateTime date) {
+            this.date = date;
+        }
+    }
+  learner_created: true
+- name: src/platform/controllers/WebController.java
+  visible: true
+  text: |
+    package platform.controllers;
+
+    import org.springframework.stereotype.Controller;
+    import org.springframework.ui.Model;
+    import org.springframework.web.bind.annotation.GetMapping;
+    import org.springframework.web.bind.annotation.PathVariable;
+    import platform.services.CodeService;
+
+    @Controller
+    public class WebController {
+
+        private final CodeService codeService;
+
+        public WebController(CodeService codeService) {
+            this.codeService = codeService;
+        }
+
+        @GetMapping("/code/{id}")
+        public String code(@PathVariable int id, Model model) {
+            model.addAttribute("code", codeService.getCode(id));
+            return "code";
+        }
+
+        @GetMapping("/code/latest")
+        public String codeLatest(Model model) {
+            model.addAttribute("codes", codeService.getLatest());
+            return "codes";
+        }
+
+        @GetMapping("/code/new")
+        public String codeNew() {
+            return "new";
+        }
+    }
+  learner_created: true
+- name: src/platform/services/CodeService.java
+  visible: true
+  text: |
+    package platform.services;
+
+    import org.modelmapper.ModelMapper;
+    import org.springframework.stereotype.Service;
+    import platform.dto.CodeDTO;
+    import platform.models.Code;
+
+    import java.time.LocalDateTime;
+    import java.util.ArrayList;
+    import java.util.List;
+
+    @Service
+    public class CodeService {
+
+        private final ModelMapper modelMapper;
+        private static int count = 0;
+        private final static ArrayList<Code> codes = new ArrayList<>();
+
+        public CodeService(ModelMapper modelMapper) {
+            this.modelMapper = modelMapper;
+        }
+
+        public CodeDTO getCode(int id) {
+            return modelMapper.map(codes.get(id - 1), CodeDTO.class);
+        }
+
+        public void setCode(Code code) {
+            count++;
+
+            code.setId(count);
+            code.setDate(LocalDateTime.now());
+            codes.add(code);
+        }
+
+        public List<CodeDTO> getLatest() {
+            List<CodeDTO> result = new ArrayList<>();
+
+            int count = 0;
+            for (int i = codes.size(); i > 0 && count < 10; i--, count++) {
+                result.add(modelMapper.map(codes.get(i - 1), CodeDTO.class));
+            }
+
+            return result;
+        }
+    }
+  learner_created: true
+- name: src/resources/templates/code.ftlh
+  visible: true
+  text: |-
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Code</title>
+    </head>
+    <body>
+    <pre id="code_snippet">${code.getCode()}</pre>
+    <span id="load_date">${code.getDate()}</span>
+    </body>
+    </html>
+  learner_created: true
+- name: src/resources/templates/new.ftlh
+  visible: true
+  text: |-
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <title>Create</title>
+    </head>
+    <script>
+    function send() {
+        let object = {
+            "code": document.getElementById("code_snippet").value
+        };
+
+        let json = JSON.stringify(object);
+
+        let xhr = new XMLHttpRequest();
+        xhr.open("POST", '/api/code/new', false)
+        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+        xhr.send(json);
+
+        if (xhr.status == 200) {
+          alert("Success!");
+        }
+    }
+    </script>
+    <body>
+    <textarea id="code_snippet"> ... </textarea>
+    <button id="send_snippet" type="submit" onclick="send()">Submit</button>
+    </body>
+    </html>
+  learner_created: true
+- name: src/resources/templates/codes.ftlh
+  visible: true
+  text: |-
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Latest</title>
+    </head>
+    <body>
+    <#list codes as codedto>
+    <pre id="code_snippet">${codedto.getCode()}</pre>
+    <span id="load_date">${codedto.getDate()}</span>
+    <br/>
+    </#list>
+    </body>
+    </html>
+  learner_created: true
+- name: src/platform/controllers/ApiController.java
+  visible: true
+  text: |
+    package platform.controllers;
+
+    import org.springframework.beans.factory.annotation.Autowired;
+    import org.springframework.web.bind.annotation.*;
+    import platform.dto.CodeDTO;
+    import platform.models.Code;
+    import platform.services.CodeService;
+
+    import java.util.List;
+    import java.util.Map;
+
+    @RestController
+    @RequestMapping("/api")
+    public class ApiController {
+
+        private final CodeService codeService;
+
+        @Autowired
+        public ApiController(CodeService codeService) {
+            this.codeService = codeService;
+        }
+
+        @GetMapping("/code/{id}")
+        public CodeDTO getCode(@PathVariable int id) {
+            return codeService.getCode(id);
+        }
+
+        @GetMapping("/code/latest")
+        public List<CodeDTO> getLatest() {
+            return codeService.getLatest();
+        }
+
+        @PostMapping("/code/new")
+        public Map<String, String> postCode(@RequestBody Code code) {
+            codeService.setCode(code);
+
+            Map<String, String> response = Map.of("id", String.valueOf(code.getId()));
+
+            return response;
+        }
+    }
+  learner_created: true
+- name: src/platform/repositories/CodeRepository.java
+  visible: true
+  learner_created: true
+- name: src/platform/util/CodeNotFoundException.java
+  visible: true
+  learner_created: true
 feedback_link: https://hyperskill.org/learn/step/11030#comment
-status: Unchecked
+status: Solved
+feedback:
+  message: Congratulations!
+  time: Thu, 08 Sep 2022 19:20:37 UTC
 record: -1
