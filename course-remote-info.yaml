@@ -3,14 +3,14 @@ hyperskill_project:
   ide_files: https://stepik.org/media/attachments/lesson/405256/additional_files.json
   is_template_based: false
   use_ide: true
-update_date: Thu, 01 Jan 1970 00:00:00 UTC
+update_date: Thu, 08 Sep 2022 15:53:07 UTC
 stages:
 - id: 692
   step: 11027
   is_completed: true
 - id: 693
   step: 11028
-  is_completed: false
+  is_completed: true
 - id: 694
   step: 11029
   is_completed: false
@@ -26,8 +26,6 @@ topics:
     theory_id: 3739
   - title: JVM, JRE, and JDK
     theory_id: 3499
-  - title: Units of information
-    theory_id: 6865
   - title: IDE
     theory_id: 10996
   - title: Introduction to Operating systems
@@ -56,6 +54,83 @@ topics:
     theory_id: 13287
   - title: Computer programming
     theory_id: 8739
+  - title: Build tools
+    theory_id: 4284
+  - title: Command line overview
+    theory_id: 8977
+  - title: Parameters and Options
+    theory_id: 9746
+  - title: Java Archive
+    theory_id: 4311
+  - title: Gradle basics
+    theory_id: 5075
+  - title: Basic project with Gradle
+    theory_id: 5077
+  - title: Building apps using Gradle
+    theory_id: 7917
+  - title: Dependency management
+    theory_id: 5076
+  - title: External resources
+    theory_id: 6216
+  - title: Web development
+    theory_id: 13931
+  - title: HTML basics
+    theory_id: 6434
+  - title: Libraries
+    theory_id: 8504
+  - title: Frameworks
+    theory_id: 6701
+  - title: Tags and Attributes
+    theory_id: 7536
+  - title: HTML page structure
+    theory_id: 6491
+  - title: IntelliJ IDEA
+    theory_id: 3801
+  - title: IDEA Basics
+    theory_id: 5819
+  - title: YAML
+    theory_id: 12722
+  - title: Introduction to software architecture
+    theory_id: 15368
+  - title: JSON
+    theory_id: 6854
+  - title: MVC
+    theory_id: 17197
+  1:
+  - title: Units of information
+    theory_id: 6865
+  - title: Computer algorithms
+    theory_id: 16547
+  - title: The big O notation
+    theory_id: 16699
+  - title: Best, average and worst cases
+    theory_id: 20084
+  - title: Data structures
+    theory_id: 16927
+  - title: Immutability
+    theory_id: 7929
+  - title: Block-level elements
+    theory_id: 7271
+  - title: Inline elements
+    theory_id: 7518
+  - title: Comments
+    theory_id: 8170
+  - title: What is CSS
+    theory_id: 7678
+  - title: Connecting CSS to HTML
+    theory_id: 7418
+  - title: Basic syntax
+    theory_id: 7722
+  - title: Comments
+    theory_id: 7730
+  - title: HTML attributes id and class
+    theory_id: 7527
+  - title: Intro to HTML forms
+    theory_id: 6560
+  - title: Posting and deleting data via REST
+    theory_id: 13292
+  - title: Handling requests with bodies
+    theory_id: 13334
   - title: Paradigms
     theory_id: 15860
   - title: Introduction to Java
@@ -118,133 +193,24 @@ topics:
     theory_id: 3511
   - title: Arrays as parameters
     theory_id: 3594
+  - title: Iterating over arrays
+    theory_id: 3602
   - title: Characters
     theory_id: 3514
   - title: String
     theory_id: 3523
   - title: Final variables
     theory_id: 7427
-  - title: Introduction to OOP
-    theory_id: 3614
-  - title: Package
-    theory_id: 3621
-  - title: Build tools
-    theory_id: 4284
-  - title: Command line overview
-    theory_id: 8977
-  - title: Parameters and Options
-    theory_id: 9746
-  - title: Java Archive
-    theory_id: 4311
-  - title: Gradle basics
-    theory_id: 5075
-  - title: Basic project with Gradle
-    theory_id: 5077
-  - title: Building apps using Gradle
-    theory_id: 7917
-  - title: Dependency management
-    theory_id: 5076
-  - title: External resources
-    theory_id: 6216
-  - title: Web development
-    theory_id: 13931
-  - title: HTML basics
-    theory_id: 6434
-  - title: Libraries
-    theory_id: 8504
-  - title: Frameworks
-    theory_id: 6701
-  - title: Tags and Attributes
-    theory_id: 7536
-  - title: HTML page structure
-    theory_id: 6491
-  - title: IntelliJ IDEA
-    theory_id: 3801
-  - title: IDEA Basics
-    theory_id: 5819
-  - title: YAML
-    theory_id: 12722
-  - title: Introduction to software architecture
-    theory_id: 15368
-  - title: JSON
-    theory_id: 6854
-  - title: Reducing boilerplate code with Lombok
-    theory_id: 13983
-  - title: MVC
-    theory_id: 17197
-  - title: Defining classes
-    theory_id: 3618
-  - title: Constructor
-    theory_id: 3535
-  - title: Instance methods
-    theory_id: 3495
-  - title: Access modifiers
-    theory_id: 3589
-  - title: Getters and setters
-    theory_id: 3599
-  - title: Inheritance
-    theory_id: 3583
-  - title: Protected modifier
-    theory_id: 6692
-  - title: Referencing subclass objects
-    theory_id: 3585
-  - title: The Object class
-    theory_id: 3596
-  - title: Multiple constructors
-    theory_id: 3538
-  - title: The keyword super
-    theory_id: 3588
-  - title: Objects
-    theory_id: 4727
-  - title: Static members
-    theory_id: 3534
-  - title: Annotations basics
-    theory_id: 3622
-  - title: Hiding and overriding
-    theory_id: 3572
-  - title: toString()
-    theory_id: 3584
-  1:
-  - title: Computer algorithms
-    theory_id: 16547
-  - title: The big O notation
-    theory_id: 16699
-  - title: Best, average and worst cases
-    theory_id: 20084
-  - title: Data structures
-    theory_id: 16927
-  - title: Immutability
-    theory_id: 7929
-  - title: Block-level elements
-    theory_id: 7271
-  - title: Inline elements
-    theory_id: 7518
-  - title: Comments
-    theory_id: 8170
-  - title: What is CSS
-    theory_id: 7678
-  - title: Connecting CSS to HTML
-    theory_id: 7418
-  - title: Basic syntax
-    theory_id: 7722
-  - title: Comments
-    theory_id: 7730
-  - title: HTML attributes id and class
-    theory_id: 7527
-  - title: Intro to HTML forms
-    theory_id: 6560
-  - title: Posting and deleting data via REST
-    theory_id: 13292
-  - title: Handling requests with bodies
-    theory_id: 13334
-  - title: Iterating over arrays
-    theory_id: 3602
   - title: Errors in programs
     theory_id: 3536
   - title: What is an exception
     theory_id: 3497
   - title: NPE
     theory_id: 1945
+  - title: Introduction to OOP
+    theory_id: 3614
+  - title: Package
+    theory_id: 3621
   - title: Pseudocode
     theory_id: 15090
   - title: Pseudocode basics
@@ -293,6 +259,36 @@ topics:
     theory_id: 3581
   - title: Instant
     theory_id: 21233
+  - title: Defining classes
+    theory_id: 3618
+  - title: Constructor
+    theory_id: 3535
+  - title: Instance methods
+    theory_id: 3495
+  - title: Access modifiers
+    theory_id: 3589
+  - title: Getters and setters
+    theory_id: 3599
+  - title: Inheritance
+    theory_id: 3583
+  - title: Protected modifier
+    theory_id: 6692
+  - title: Referencing subclass objects
+    theory_id: 3585
+  - title: The Object class
+    theory_id: 3596
+  - title: Multiple constructors
+    theory_id: 3538
+  - title: The keyword super
+    theory_id: 3588
+  - title: Objects
+    theory_id: 4727
+  - title: Static members
+    theory_id: 3534
+  - title: Annotations basics
+    theory_id: 3622
+  - title: Hiding and overriding
+    theory_id: 3572
   - title: Polymorphism
     theory_id: 3587
   - title: Interface
