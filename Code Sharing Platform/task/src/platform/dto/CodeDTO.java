@@ -7,6 +7,8 @@ public class CodeDTO {
 
     private String code;
     private LocalDateTime date;
+    private int time;
+    private int views;
 
     public CodeDTO() {
     }
@@ -25,5 +27,21 @@ public class CodeDTO {
 
     public void setDate(LocalDateTime date) {
         this.date = date;
+    }
+
+    public int getTime() {
+        return time;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
+    }
+
+    public int getViews() {
+        return views;
+    }
+
+    public void setViews(int views) {
+        this.views = views;
     }
 }

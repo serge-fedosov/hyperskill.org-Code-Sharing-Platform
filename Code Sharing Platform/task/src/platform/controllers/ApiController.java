@@ -1,5 +1,6 @@
 package platform.controllers;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import platform.dto.CodeDTO;
@@ -14,28 +15,27 @@ import java.util.Map;
 public class ApiController {
 
     private final CodeService codeService;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public ApiController(CodeService codeService) {
+    public ApiController(CodeService codeService, ModelMapper modelMapper) {
         this.codeService = codeService;
+        this.modelMapper = modelMapper;
     }
 
-    @GetMapping("/code/{id}")
-    public CodeDTO getCode(@PathVariable int id) {
-        return codeService.getCode(id);
+    @GetMapping("/code/{uuid}")
+    public CodeDTO loadCode(@PathVariable String uuid) {
+        return modelMapper.map(codeService.loadCode(uuid), CodeDTO.class);
     }
 
     @GetMapping("/code/latest")
-    public List<CodeDTO> getLatest() {
-        return codeService.getLatest();
+    public List<CodeDTO> loadLatest() {
+        return codeService.loadLatest();
     }
 
     @PostMapping("/code/new")
-    public Map<String, String> postCode(@RequestBody Code code) {
-        codeService.setCode(code);
-
-        Map<String, String> response = Map.of("id", String.valueOf(code.getId()));
-
-        return response;
+    public Map<String, String> saveCode(@RequestBody Code code) {
+        codeService.saveCode(code);
+        return Map.of("id", String.valueOf(code.getUuid()));
     }
 }

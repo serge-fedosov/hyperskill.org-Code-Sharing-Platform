@@ -24,6 +24,13 @@ function send() {
 </script>
 <body>
 <textarea id="code_snippet"> ... </textarea>
+<br/>
+<label for="time_restriction">Time restriction: </label>
+<input id="time_restriction" type="text"/>
+<br/>
+<label for="views_restriction">Views restriction: </label>
+<input id="views_restriction" type="text"/>
+<br/>
 <button id="send_snippet" type="submit" onclick="send()">Submit</button>
 </body>
 </html>

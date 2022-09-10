@@ -7,11 +7,13 @@ import org.springframework.transaction.annotation.Transactional;
 import platform.dto.CodeDTO;
 import platform.models.Code;
 import platform.repositories.CodeRepository;
-import platform.util.CodeNotFoundException;
+import platform.util.NotFoundException;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,23 +29,60 @@ public class CodeService {
         this.modelMapper = modelMapper;
     }
 
-    public CodeDTO getCode(int id) {
-        Optional<Code> code = codeRepository.findById(id);
+    @Transactional
+    public Code loadCode(String uuid) {
+        Optional<Code> optionalCode = codeRepository.findByUuid(uuid);
 
-        if (code.isEmpty()) {
-            throw new CodeNotFoundException();
+        if (optionalCode.isEmpty()) {
+            throw new NotFoundException("Not found");
         }
 
-        return modelMapper.map(code.get(), CodeDTO.class);
+        Code code = optionalCode.get();
+
+        if (code.isRestrictions()) {
+            int views = code.getViews();
+
+            if (views > 0) {
+                views--;
+                code.setViews(views);
+
+                if (views == 0) {
+                    codeRepository.delete(code);
+                }
+            }
+
+            int time = code.getTime();
+            if (time > 0) {
+                LocalDateTime dateFrom = code.getDateFrom();
+                LocalDateTime dateNow = LocalDateTime.now();
+                long differ = ChronoUnit.SECONDS.between(dateFrom, dateNow);
+                int newTime = time - (int) differ;
+                code.setDateFrom(dateNow);
+                code.setTime(newTime);
+
+                if (newTime < 1) {
+                    codeRepository.delete(code);
+                    codeRepository.flush();
+                    throw new NotFoundException("Not found");
+                }
+            }
+        }
+
+        return code;
     }
 
     @Transactional
-    public void setCode(Code code) {
+    public void saveCode(Code code) {
         code.setDate(LocalDateTime.now());
+        code.setDateFrom(LocalDateTime.now());
+        code.setUuid(UUID.randomUUID().toString());
+        code.setRestrictions(code.getViews() > 0 || code.getTime() > 0);
+        code.setViewsRestriction(code.getViews() > 0);
+        code.setTimeRestriction(code.getTime() > 0);
         codeRepository.save(code);
     }
 
-    public List<CodeDTO> getLatest() {
-        return codeRepository.findTop10ByOrderByIdDesc().stream().map(code -> modelMapper.map(code, CodeDTO.class)).collect(Collectors.toList());
+    public List<CodeDTO> loadLatest() {
+        return codeRepository.findTop10ByTimeRestrictionFalseAndViewsRestrictionFalseOrderByIdDesc().stream().map(code -> modelMapper.map(code, CodeDTO.class)).collect(Collectors.toList());
     }
 }
